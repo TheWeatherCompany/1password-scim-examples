@@ -9,9 +9,23 @@ Before you begin deploying 1Password SCIM Bridge,
 - learn more about [automating provisioning in 1Password using SCIM](https://support.1password.com/scim/).
 - review the [Preparation Guide](/PREPARATION.md). The guide will help you plan for some of the technical components of the deployment and consider some issues you may encounter along the way.
 
-## Deployment methods
-### Azure
-- [Azure Container Apps (CaaS)](https://support.1password.com/scim-deploy-azure/)
+### Containers as a service deployment options
+
+Containers as a service (CaaS) can simplify your deployment by using the built-in tools of the CaaS for DNS and certificate management. This gives you an easy, low-cost SCIM bridge with minimal infrastructure management requirements.
+
+- Azure Container Apps
+  - [Azure Portal Deployment using an ARM Template](https://support.1password.com/scim-deploy-azure/) - recommended for most Azure Container App deployments
+  - [CLI Deployment](https://support.1password.com/cs/scim-deploy-azure-container-apps/) - recommended if you want to use Azure CLI
+  - [Azure Portal Deployment (Manual)](/azure-container-apps/README.md) - recommended for those not able to use the tools in the above CLI deployment guide
+  - [Container Apps advanced customizations](/azure-container-apps/ADVANCED.md)
+- DigitalOcean App Platform 
+  - [DigitalOcean Portal Deployment](https://support.1password.com/cs/scim-deploy-digitalocean-ap/)
+  - [DigitalOcean command line tool & the 1Password CLI Deployment](/do-app-platform-op-cli) 
+
+### Advanced deployment options
+If you have particular requirements for your environment, we recommend an advanced deployment. These example configurations will give you a base to create the deployment from, as well as explain what 1Password SCIM Bridge needs to function and how to maintain your bridge once you've deployed it.
+
+- [AWS ECS Fargate with Terraform](/aws-ecsfargate-terraform)
 - [Azure Kubernetes Service](https://support.1password.com/cs/scim-deploy-azure-kubernetes/)
 
 ### Amazon Web Services (AWS)
