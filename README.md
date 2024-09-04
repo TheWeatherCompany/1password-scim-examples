@@ -18,46 +18,26 @@ Containers as a service (CaaS) can simplify your deployment by using the built-i
   - [CLI Deployment](https://support.1password.com/cs/scim-deploy-azure-container-apps/) - recommended if you want to use Azure CLI
   - [Azure Portal Deployment (Manual)](/azure-container-apps/README.md) - recommended for those not able to use the tools in the above CLI deployment guide
   - [Container Apps advanced customizations](/azure-container-apps/ADVANCED.md)
-- DigitalOcean App Platform 
+- DigitalOcean App Platform
   - [DigitalOcean Portal Deployment](https://support.1password.com/cs/scim-deploy-digitalocean-ap/)
-  - [DigitalOcean command line tool & the 1Password CLI Deployment](/do-app-platform-op-cli) 
+  - [DigitalOcean command line tool & the 1Password CLI Deployment](/do-app-platform-op-cli)
 
 ### Advanced deployment options
+
 If you have particular requirements for your environment, we recommend an advanced deployment. These example configurations will give you a base to create the deployment from, as well as explain what 1Password SCIM Bridge needs to function and how to maintain your bridge once you've deployed it.
 
 - [AWS ECS Fargate with Terraform](/aws-ecsfargate-terraform)
-- [Azure Kubernetes Service](https://support.1password.com/cs/scim-deploy-azure-kubernetes/)
-
-### Amazon Web Services (AWS)
-- ✨ **BETA** [AWS ECS Fargate with CloudFormation](/beta/aws-ecsfargate-cfn)
-- [AWS ECS Fargate with Terraform](/aws-ecsfargate-terraform)
-
-### Google Cloud (GCP)
-- [Google Cloud Run (CaaS)](/beta/google-cloud-run)
-- [Google Cloud Marketplace](https://support.1password.com/scim-deploy-gcp/)
-
-### Digital Ocean
-- [DigitalOcean App Platform (CaaS)](https://support.1password.com/cs/scim-deploy-digitalocean-ap/)
-- [DigitalOcean Marketplace](https://support.1password.com/scim-deploy-digitalocean/)
-
-
-### Generic
-- [Docker](/docker)
+- [Azure Kubernetes Service](https://support.1password.com/cs/scim-deploy-azure-kubernetes)
+- [Docker Swarm](/docker)
 - [Kubernetes](/kubernetes)
-- [Helm](https://github.com/1Password/op-scim-helm)
+- **(⚠️ Deprecated)** [Docker Compose & Docker Swarm](/deprecated/docker)
 
 ## Choosing a deployment method
 
 Choosing a deployment method comes down to which infrastructure and tool you mainly use in your organization. Under the hood they all use the same Docker image and serve the same purpose of a SCIM bridge. Below are some more information on terminologies used in the deployment method list.
 
-### Marketplace
-These deployment methods use a marketplace app from Google Cloud Platform or DigitalOcean, and leverages Kubernetes.
-
-### Containers as a service (Caas)
-Containers as a service (CaaS) can simplify your deployment by using the built-in tools of the container service for DNS and certificate management. This gives you an easy, low-cost SCIM bridge with minimal infrastructure management requirements.
-
-### Beta
-The beta deployments _should_ work, but aren't guaranteed and will change in the future. See the [README](./beta/README.md) for more information about the "beta" designation.
+- [AWS with CloudFormation](/beta/aws-ecsfargate-cfn)
+- ✨ **NEW** [Google Cloud Run](/beta/google-cloud-run)
 
 ## Deprecated deployment methods
 
