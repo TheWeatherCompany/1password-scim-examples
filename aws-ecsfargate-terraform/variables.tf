@@ -3,6 +3,11 @@ variable "aws_region" {
   description = "The region of the AWS account where the 1Password SCIM bridge will be deployed."
 }
 
+variable "profile_name" {
+  type        = string
+  description = "AWS Profile in ~/.aws/config"
+}
+
 variable "domain_name" {
   type        = string
   description = "The public DNS address pointing to your SCIM bridge."
@@ -21,6 +26,7 @@ variable "name_prefix" {
 variable "vpc_name" {
   type        = string
   description = "The name of an existing VPC to use."
+  default = "ssdn-twc-tools-prod-vpc"
 }
 
 variable "wildcard_cert" {

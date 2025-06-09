@@ -11,6 +11,7 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
+  profile = var.profile_name
 }
 
 locals {
@@ -168,6 +169,67 @@ resource "aws_iam_role_policy" "scimsession" {
   policy      = data.aws_iam_policy_document.scimsession.json
 }
 
+/* resource "aws_ecs_service" "op_scim_bridge" {
+  name             = format("%s_%s", local.name_prefix, "service")
+  cluster          = aws_ecs_cluster.op_scim_bridge.id
+  task_definition  = aws_ecs_task_definition.op_scim_bridge.arn
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
+  desired_count    = 1
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.op_scim_bridge.arn
+    container_name   = jsondecode(file("${path.module}/task-definitions/scim.json"))[0].name
+    container_port   = 3002
+  }
+
+  network_configuration {
+    subnets          = ["subnet-05504842358c60fb5","subnet-0e8e9402d851e6e05"]
+    assign_public_ip = true
+    security_groups  = [aws_security_group.service.id]
+  }
+
+  tags = local.tags
+
+  depends_on = [aws_lb_listener.https]
+} 
+
+resource "aws_alb" "op_scim_bridge" {
+  name               = var.name_prefix == "" ? "op-scim-bridge-alb" : format("%s-%s", local.name_prefix, "alb")
+  load_balancer_type = "application"
+  subnets            = ["subnet-05504842358c60fb5","subnet-0e8e9402d851e6e05"]
+  # subnets            = data.aws_subnets.public.ids
+  security_groups    = [aws_security_group.alb.id]
+
+  tags = local.tags
+} */
+
+# Lookup the VPC by name
+data "aws_vpc" "target_vpc" {
+  filter {
+    name   = "tag:Name"
+    values = [var.vpc_name]
+  }
+}
+
+# Get subnet IDs within the specified VPC
+data "aws_subnets" "op_vpc_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.target_vpc.id]
+  }
+}
+
+# Application Load Balancer (ALB) definition
+resource "aws_alb" "op_scim_bridge" {
+  name               = var.name_prefix == "" ? "op-scim-bridge-alb" : format("%s-%s", local.name_prefix, "alb")
+  load_balancer_type = "application"
+  subnets            = data.aws_subnets.op_vpc_subnets.ids
+  security_groups    = [aws_security_group.alb.id]
+  tags               = local.tags
+}
+
+# ECS Service definition with dynamic subnet assignment and ALB integration
 resource "aws_ecs_service" "op_scim_bridge" {
   name             = format("%s_%s", local.name_prefix, "service")
   cluster          = aws_ecs_cluster.op_scim_bridge.id
@@ -183,7 +245,7 @@ resource "aws_ecs_service" "op_scim_bridge" {
   }
 
   network_configuration {
-    subnets          = data.aws_subnets.public.ids
+    subnets          = data.aws_subnets.op_vpc_subnets.ids
     assign_public_ip = true
     security_groups  = [aws_security_group.service.id]
   }
@@ -191,15 +253,6 @@ resource "aws_ecs_service" "op_scim_bridge" {
   tags = local.tags
 
   depends_on = [aws_lb_listener.https]
-}
-
-resource "aws_alb" "op_scim_bridge" {
-  name               = var.name_prefix == "" ? "op-scim-bridge-alb" : format("%s-%s", local.name_prefix, "alb")
-  load_balancer_type = "application"
-  subnets            = data.aws_subnets.public.ids
-  security_groups    = [aws_security_group.alb.id]
-
-  tags = local.tags
 }
 
 resource "aws_security_group" "alb" {
